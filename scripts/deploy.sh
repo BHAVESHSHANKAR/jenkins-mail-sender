@@ -1,5 +1,9 @@
 #!/bin/bash
 
-echo "Deployment script will be added after Render setup."
+echo "======================================"
+echo "Deploying to Render..."
+echo "======================================"
 
-exit 0
+curl -X POST "$RENDER_DEPLOY_HOOK"
+
+echo "Deployment request sent successfully."
