@@ -1,5 +1,10 @@
 pipeline {
+
     agent any
+
+    environment {
+        RENDER_DEPLOY_HOOK = credentials('render-deploy-hook')
+    }
 
     stages {
 
@@ -26,12 +31,13 @@ pipeline {
     post {
 
         success {
-            sh 'bash scripts/send_mail.sh SUCCESS'
+            sh 'bash scripts/send_email.sh SUCCESS'
         }
 
         failure {
-            sh 'bash scripts/send_mail.sh FAILURE'
+            sh 'bash scripts/send_email.sh FAILURE'
         }
 
     }
+
 }
