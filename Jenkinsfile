@@ -1,55 +1,41 @@
 pipeline {
+
     agent any
 
     environment {
-        // Add any environment variables you need here
-        // e.g. IMAGE_NAME = "my-app"
+        RENDER_DEPLOY_HOOK = credentials('render-deploy-hook')
     }
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/BHAVESHSHANKAR/jenkins-mail-sender'
-            }
-        }
-
         stage('Build') {
             steps {
-                echo 'Building application...'
-                // Replace with your actual build command, e.g.:
-                // sh 'npm install && npm run build'
-                // sh 'mvn clean package'
-                sh 'echo "Build step goes here"'
+                sh 'bash scripts/build.sh'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // sh 'npm test'
-                // sh 'mvn test'
-                sh 'echo "Test step goes here"'
+                sh 'bash scripts/test.sh'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying application...'
-                // Add your deployment commands here
-                sh 'echo "Deploy step goes here"'
+                sh 'bash scripts/deploy.sh'
             }
         }
+
     }
 
     post {
 
         success {
-            emailext(
-                subject: "✅ Deployment Successful | ${env.JOB_NAME} | Build #${env.BUILD_NUMBER}",
-                mimeType: 'text/html',
-                to: 'bhaveshshankarkallur@gmail.com',
-                body: """
+        emailext(
+            subject: "✅ Deployment Successful | ${env.JOB_NAME} | Build #${env.BUILD_NUMBER}",
+            mimeType: 'text/html',
+            to: 'bhaveshshankarkallur@gmail.com',
+            body: """
 <html>
 <head>
 <style>
@@ -166,15 +152,15 @@ Regards,<br>
 </body>
 </html>
 """
-            )
-        }
+        )
+    }
 
         failure {
-            emailext(
-                subject: "❌ Deployment Failed | ${env.JOB_NAME} | Build #${env.BUILD_NUMBER}",
-                mimeType: 'text/html',
-                to: 'bhaveshshankarkallur@gmail.com',
-                body: """
+        emailext(
+            subject: "❌ Deployment Failed | ${env.JOB_NAME} | Build #${env.BUILD_NUMBER}",
+            mimeType: 'text/html',
+            to: 'bhaveshshankarkallur@gmail.com',
+            body: """
 <html>
 <head>
 <style>
@@ -291,7 +277,10 @@ Regards,<br>
 </body>
 </html>
 """
-            )
-        }
+        )
     }
+
+
+    }
+
 }
