@@ -26,11 +26,11 @@ pipeline {
     post {
 
         success {
-            sh 'bash scripts/send_email.sh SUCCESS'
+            sh 'bash scripts/send_mail.sh SUCCESS'
         }
 
         failure {
-            sh 'bash scripts/send_email.sh FAILURE'
+            sh 'bash scripts/send_mail.sh FAILURE'
         }
 
     }
